@@ -1,0 +1,67 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.env/
+.venv/
+.env
+
+# Pipenv
+Pipfile.lock
+
+# Marimo cache (if using marimo's cache dir)
+.marimo-cache/
+.marimo/
+
+# Jupyter Notebook checkpoints (if used alongside Marimo)
+.ipynb_checkpoints/
+
+# Editor & OS specific
+.DS_Store
+#.vscode/
+.idea/
+*.swp
+*~
+
+# Pytest cache
+.pytest_cache/
+
+# Logs and outputs
+*.log
+*.out
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# MyPy and Pyright
+.mypy_cache/
+.pyright/
+
+# Pyre type checker
+.pyre/
+
+# Coverage reports
+htmlcov/
+coverage.xml
+*.cover
+.cache
+
+# Local SQLite or other dev DBs
+*.sqlite3
+
+# Marimo notebooks cache (in case custom paths used)
+**/.marimo_cache/
+**/.marimo/
+
+# Compiled extensions
+*.so
+
+# Custom files and folders
+assets/responses/

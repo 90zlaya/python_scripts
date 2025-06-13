@@ -1,0 +1,16 @@
+[flake8]
+ignore = E501           # Ignore line length errors (already present)
+max-line-length = 88    # Set a custom max line length (matches Black default)
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    .venv,
+    env,
+    venv
+select = E,F,W,C        # Only select specific error/warning codes
+show-source = true      # Show the source code for each error
+statistics = true       # Show error statistics at the end
+per-file-ignores =
+    __init__.py:F401    # Ignore unused imports in __init__.py files
