@@ -58,10 +58,10 @@ This repository contains Python scripts designed to automate common tasks and im
 
 ```bash
 # Show help
-python src/generate_password.py --help
+python3 src/generate_password.py --help
 
 # Generate password with 20 characters
-python src/generate_password.py -l 20
+python3 src/generate_password.py -l 20
 ```
 
 [⬆ back to available scripts](#available-scripts)
@@ -74,13 +74,13 @@ python src/generate_password.py -l 20
 
 ```bash
 # Show help
-python src/php_switch.py --help
+python3 src/php_switch.py --help
 
 # List installed PHP versions and interactively select one
-python src/php_switch.py
+python3 src/php_switch.py
 
 # Switch to a specific PHP version (e.g., 8.3)
-python src/php_switch.py 8.3
+python3 src/php_switch.py 8.3
 ```
 
 [⬆ back to available scripts](#available-scripts)
@@ -93,10 +93,10 @@ python src/php_switch.py 8.3
 
 ```bash
 # Show help
-python dev_setup.py --help
+python3 dev_setup.py --help
 
 # Create and push a new branch for issue 123 with title "Fix login bug"
-python dev_setup.py 123 "Fix login bug"
+python3 dev_setup.py 123 "Fix login bug"
 ```
 
 The script requires a Git repository and optionally reads values from a `.env` file:
