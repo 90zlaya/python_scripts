@@ -86,13 +86,6 @@ def end(is_with_error, error_text=None):
         sys.exit(0)
 
 
-def show_help(script_name):
-    print(f"\nRunning {script_name}")
-    print("Description: Development setup for git\n")
-    print(f"Show this help  : {script_name} -h")
-    print(f"Run this script : {script_name} [issue-number] [issue-name]\n")
-
-
 def get_git_branches():
     """Return a list of all local git branches."""
     result = subprocess.run(["git", "branch", "--list"], capture_output=True, text=True)
@@ -129,22 +122,18 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="Development setup for git. Creates a new branch for an issue and pushes it to remote.",
-        add_help=False,
         usage=f"{script_name} [issue-number] [issue-name]",
     )
     parser.add_argument("issue_number", nargs="?", help="Issue number (required)")
     parser.add_argument("issue_name", nargs="?", help="Issue name (required)")
-    parser.add_argument(
-        "-h", "--help", action="store_true", help="Show help message and exit"
-    )
 
     args = parser.parse_args()
 
-    if args.help or not args.issue_number or not args.issue_name:
-        show_help(script_name)
-        if not args.help:
-            print("ERROR: Both issue-number and issue-name are required!\n")
-        sys.exit(0 if args.help else 1)
+    # Exit if required arguments are missing
+    if not args.issue_number or not args.issue_name:
+        parser.print_usage()
+        print("\nERROR: Both issue-number and issue-name are required!\n")
+        sys.exit(1)
 
     print(f"Script {script_name} starting...\n")
 
@@ -179,24 +168,27 @@ def main():
         subprocess.run(["git", "push", "-u", "origin", target_branch])
 
         # Create message name and message description
-        message_name = (
-            f"Name: {REQUEST_PREFIX} #{args.issue_number} {args.issue_name}\n"
-        )
+        message_name = f"{REQUEST_PREFIX} #{args.issue_number} {args.issue_name}\n"
         if ISSUE_BASE_PATH:
-            message_description = f"Description: Based on {BRANCH_PREFIX} [#{args.issue_number}]({ISSUE_BASE_PATH}/{args.issue_number})"
+            message_description = f"Based on {BRANCH_PREFIX} [#{args.issue_number}]({ISSUE_BASE_PATH}/{args.issue_number})"
         else:
             message_description = ""
 
-        # Create message for clipboard
-        message_for_clipboard = message_name + message_description
-
-        """
-        Copy message to clipboard is best if you have installed https://github.com/diodon-dev/diodon on your system.
-        """
-        pyperclip.copy(message_description)
-        pyperclip.copy(message_name)
-
-        print(f"\nCopied following info to the clipboard:\n\n{message_for_clipboard}")
+        try:
+            """
+            Copy message to clipboard is best if you have installed https://github.com/diodon-dev/diodon on your system.
+            """
+            if message_description:
+                pyperclip.copy(message_description)
+                print(
+                    f"\nCopied message description to the clipboard:\n\n{message_description}"
+                )
+            pyperclip.copy(message_name)
+            print(f"\nCopied message name info to the clipboard:\n\n{message_name}")
+        except pyperclip.PyperclipException:
+            print(
+                "Warning: Could not copy to clipboard. Please install xclip/xsel on Linux."
+            )
     else:
         subprocess.run(["git", "checkout", source_branch])
         subprocess.run(["git", "branch", "-D", target_branch])
@@ -205,4 +197,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except EOFError:
+        print("\nScript canceled. Exiting.")
+        sys.exit(0)
+    except KeyboardInterrupt:
+        print("\nScript interrupted by user (Ctrl+C). Exiting.")
+        sys.exit(0)

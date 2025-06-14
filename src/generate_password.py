@@ -54,8 +54,12 @@ if __name__ == "__main__":
     try:
         password = generate_password(args.length)
 
-        # Copy to clipboard
-        pyperclip.copy(password)
+        try:
+            pyperclip.copy(password)
+        except pyperclip.PyperclipException:
+            print(
+                "Warning: Could not copy to clipboard. Please install xclip/xsel on Linux."
+            )
 
         print(password)
     except Exception as e:
