@@ -11,6 +11,7 @@
   * [Generate password](#generate-password)
   * [Switch PHP version](#switch-php-version)
   * [Development setup](#development-setup)
+  * [Backup files](#backup-files)
 * [Contributing](#contributing)
 * [License](#license)
 
@@ -23,7 +24,7 @@ This repository contains Python scripts designed to automate common tasks and im
 * Python 3.7+
 * pip
 * [pyperclip](https://pypi.org/project/pyperclip/) (for clipboard functionality)
-* [python-dotenv](https://pypi.org/project/python-dotenv/) (for `.env` support in development setup)
+* [python-dotenv](https://pypi.org/project/python-dotenv/) (for `.env` support)
 * **Linux:** For clipboard support, you may need to install `xclip` or `xsel` (see notes below).
 
 All required Python packages are listed in [`requirements.txt`](requirements.txt).
@@ -73,6 +74,7 @@ sudo apt-get install xsel
 * [Generate password](#generate-password)
 * [Switch PHP version](#switch-php-version)
 * [Development setup](#development-setup)
+* [Backup files](#backup-files)
 
 ---
 
@@ -222,6 +224,52 @@ For clipboard support, you may need to install `xclip` or `xsel` on Linux.
 
 ---
 
+### Backup files
+
+* **File:** [`src/backup.py`](src/backup.py)
+* **Parameters:** None (use `-h` for help)
+* **Description:** Backup important files, folders, and environment files from your system to a specified backup location. All paths and backup options are configured via the `.env` file.
+
+**Environment Variables:**  
+Configure backup sources and destinations in your `.env` file (see `.env.example`):
+
+- `BACKUP_LOCATION`: Destination directory for backups.
+- `HOME_LOCATION`: Your home directory.
+- `LOCALHOST_LOCATION`: Base directory for environment folders.
+- `SYSTEM_FOLDER`, `VSCODE_FOLDER`, `ENVIRONMENTS_FOLDER`, `HOME_FOLDER`: Folder names for organizing backups.
+- `SYSTEM_PATHS_ON_MACHINE`: Comma-separated list of system files to back up.
+- `VSCODE_PATHS_ON_MACHINE`: Comma-separated list of VS Code settings/snippets to back up.
+- `ENVIRONMENTS_ON_MACHINE`: Comma-separated list of environment directories to back up (relative to `LOCALHOST_LOCATION`).
+- `HOME_PATHS_ON_MACHINE`: Comma-separated list of folders from your home directory to back up.
+- `ENVIRONMENTS_WITH_RB`: Comma-separated list of environments that use `.env.rb` instead of `.env` (e.g., `.env.rb:project-one,.env.rb:project-two`).
+
+**Usage:**
+
+```bash
+# Show help
+python3 src/backup.py -h
+
+# Run backup
+python3 src/backup.py
+```
+
+**Features:**
+- Reads all configuration from `.env` file.
+- Backs up system files, VS Code settings, environment files, and home folders.
+- Uses `sudo` privileges to create/remove backup directories if needed.
+- Handles permission errors gracefully.
+- Handles user interruptions (`Ctrl+C`, `Ctrl+D`) gracefully.
+- Prints errors for any files or folders that could not be copied.
+
+**Example output:**
+```
+Successfully backed up all data.
+```
+
+[⬆ back to available scripts](#available-scripts)
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request.
@@ -233,3 +281,5 @@ Contributions are welcome! Please open an issue or submit a pull request.
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+[⬆ back to top](#table-of-contents)
