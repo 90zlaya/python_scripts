@@ -62,6 +62,23 @@ def switch_php_version(php_path):
     Args:
         php_path (str): The path to the PHP executable to switch to.
     """
+    # Get the currently set PHP alternative
+    current_result = subprocess.run(
+        ["update-alternatives", "--query", "php"], capture_output=True, text=True
+    )
+    current_path = None
+    if current_result.returncode == 0:
+        for line in current_result.stdout.splitlines():
+            if line.startswith("Value:"):
+                current_path = line.split(":", 1)[1].strip()
+                break
+
+    if current_path:
+        print(f"Currently set PHP version: {current_path}")
+        if current_path == php_path:
+            print("The selected PHP version is already set. No changes made.")
+            return
+
     result = subprocess.run(
         ["sudo", "update-alternatives", "--set", "php", php_path],
         capture_output=True,
@@ -72,6 +89,15 @@ def switch_php_version(php_path):
         print(result.stderr)
     else:
         print(f"✅ Successfully switched to PHP version at {php_path}.")
+        # Display the current PHP version
+        version_result = subprocess.run(
+            ["php", "--version"], capture_output=True, text=True
+        )
+        if version_result.returncode == 0:
+            print("Current PHP version:")
+            print(version_result.stdout)
+        else:
+            print("Error: Could not display PHP version.")
 
 
 def main():
@@ -119,4 +145,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except EOFError:
+        print("\nScript canceled. Exiting.")
+        sys.exit(0)
+    except KeyboardInterrupt:
+        print("\nScript interrupted by user (Ctrl+C). Exiting.")
+        sys.exit(0)
